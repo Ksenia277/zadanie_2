@@ -1,13 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite App</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <script defer src="/src/main.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
+      <link rel="stylesheet" href="src/assets/main.css">
+      <title>Todo App</title>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+  <div id="new">
+      <button id="addCardButton" @click="openModal">Добавить карточку</button>
+      <div v-bind:class="{ 'open': showModal }" class="modal">
+          <div class="modal-content">
+              <form class="cardForm" @submit.prevent="addCard">
+                  <p>
+                      <label for="GroupName">Название карточки :</label>
+                      <input id="GroupName" v-model="groupName" placeholder="Name of the card">
+                  </p>
+                  <p>
+                      <label for="InputOne">1 пункт:</label>
+                      <input id="InputOne" v-model="inputOne" placeholder="Write down a note ">
+                  </p>
+                  <p>
+                      <label for="InputTwo">2 пункт:</label>
+                      <input id="InputTwo" v-model="inputTwo" placeholder="Write down a note  ">
+                  </p>
+                  <p>
+                      <label for="InputThr">3 пункт:</label>
+                      <input id="InputThr" v-model="inputThr" placeholder="Write down a note ">
+                  </p>
+                  <p>
+                      <label for="InputFor">4 пункт:</label>
+                      <input id="InputFor" v-model="inputFor" placeholder="Write down a note ">
+                  </p>
+                  <p>
+                      <label for="InputFiv">5 пункт:</label>
+                      <input id="InputFiv" v-model="inputFiv" placeholder="Write down a note ">
+                  </p>
+                  <p>
+                      <input type="submit" value="Создать новую карточку">
+                  </p>
+                  <button @click="showModal = false">Закрыть</button>
+              </form>
+          </div>
+      </div>
+      <div class="columns" style="display: flex; justify-content: space-evenly; ">
+          <div class="column">
+              <h2>0%</h2>
+              <div class="card" v-for="group in firstColumn" :key="group.id">
+                  <h3>{{group.groupName}}</h3>
+                  <ul>
+                      <li v-for="item in group.items" :key="item.id">
+                          <input type="checkbox" v-model="item.checked" @change="updateProgress(group)">
+                          {{ item.text }}
+                      </li>
+                  </ul>
+              </div>
+          </div>
+          <div class="column">
+              <h2>50%</h2>
+              <div class="card" v-for="group in secondColumn" :key="group.id">
+                  <h3>{{group.groupName}}</h3>
+                  <ul>
+                      <li v-for="item in group.items" :key="item.id">
+                          <input type="checkbox" v-model="item.checked" @change="updateProgress(group)">
+                          {{ item.text }}
+                      </li>
+                  </ul>
+              </div>
+          </div>
+          <div class="column">
+              <h2>100%</h2>
+              <div v-for="group in thirdColumn" :key="group.id">
+                  <div class="card">
+                      <h3>{{ group.groupName }}</h3>
+                      <ul>
+                          <li v-for="item in group.items" :key="item.id">
+                              <input type="checkbox" v-model="item.checked">
+                              {{ item.text }}
+                          </li>
+                      </ul>
+                      <p v-if="group.lastChecked">{{ group.lastChecked }}</p> <!-- Отображаем дату и время -->
+                      <button @click="removeCard(index)">Удалить карточку</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script src="./js/main.js"></script>
   </body>
 </html>
